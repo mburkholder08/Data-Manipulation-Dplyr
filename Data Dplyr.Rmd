@@ -1,0 +1,113 @@
+---
+title: "QuestionA"
+output:
+  pdf_document: default
+  html_document: default
+---
+
+```{r}
+library(dplyr)
+airplanes <- read.csv(file = 'airplanes.csv')
+head(airplanes)
+```
+
+1. Summarise()
+
+The summarise function will reduce multiple values down to a single value. We can do summary statistics with this function.
+
+Example for summarise() function:
+
+In this example, I will summarise the average distance of every flight in the data set. This is a simple example which we will expand on later in the problem set.
+
+```{r}
+airplanes %>%
+  summarise(total_flight_average_distance = mean(distance))
+```
+
+2. Select()
+
+With the select() function, we can select individual columns from the data set to show. This is helpful if there are many columns and we are only using a few for a particular example
+
+Example for select() function:
+
+In this example, I am selecting the specific details of the planes, ignoring their path information.
+
+```{r}
+planeData <- select(airplanes,carrier,flight, tailnum)
+head(planeData)
+```
+
+3. Filter()
+
+With the filter command, I can choose to show only certain rows that match a criteria I want.
+
+Example for filter() function:
+
+In this example I am filtering for flights that are over 1000 miles long.
+
+```{r}
+filter(airplanes,distance >= 1000) %>%
+  head
+```
+
+4. Group_by()
+
+With the group_by command, I can group rows of data by a particular column and run summary statistics based off that grouping. We are essentially splitting the data apart and putting it back together in a reduced but aggregated format.
+
+Example for group_by() function:
+
+In this example, I will group the carriers together, and then calculate the average distance that they go per flight.
+
+```{r}
+airplanes %>%
+  group_by(carrier) %>%
+  summarise(avg_distance = mean(distance)) %>%
+  head
+```
+
+5. Arrange()
+
+With the arrange function, I can change the ordering of the rows. If the data comes to us arranged alphabetically in one column, I can change it to be arranged numerically in a different column.
+
+Example for arrange() function:
+
+In this example I will re-order the data by air_time. This will show the flights starting with the shortest air time.
+
+```{r}
+airplanes %>%
+  arrange(air_time) %>%
+  head
+```
+
+6. Mutate()
+
+With the mutate command, I can add new columns and variables that are functions of existing variables.
+
+Example of mutate() function:
+
+In this example I will add a new column showing the kilometer equivalent of distance.
+
+```{r}
+airplanes %>%
+  mutate(distance_km = distance/0.621371) %>%
+  select(distance, distance_km) %>%
+  head
+```
+
+7. Pipe Operator %>%
+
+The pipe operator allows us to pass a value or result into the next function or expression. This allows us to read data easier without having to nest, or rather helps us with nesting.
+
+Example of pipe operator %>% function:
+
+I have shown the usage of pipe operator in earlier examples but will show again. This example will select the three relevant columns, arrange it by flight number, and extract only the UA carrier.
+
+```{r}
+airplanes %>%
+  select(carrier, flight, tailnum) %>%
+  arrange(flight) %>%
+  filter(carrier == 'UA') %>%
+  head
+```
+
+
